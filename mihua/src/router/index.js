@@ -17,9 +17,30 @@ const routes = [
         component: () => import("../views/HomePage.vue"),
       },
       {
+        path: "/HomeView/UserSystem",
+        name: "UserSystem",
+        component: () => import("../views/power/UserSystem.vue"),
+      },
+      {
+        path: "/HomeView/SystemRole",
+        name: "Systemrole",
+        component: () => import("../views/power/SystemRole.vue"),
+      },
+      {
+        path: "/HomeView/CallbuillingView",
+        name:"CallbuillingView",
+        component:()=>import("../views/system/CallbuillingView.vue")
+      },
+      {
+        path: "/HomeView/TelephoneView",
+        name:"TelephoneView",
+        component:()=>import("../views/Numbermange/TelephoneView.vue")
+      },
+      {
         path: "/HomeView/EnterPrise",
         name: "EnterPrise",
         component: () => import("../views/EnterPrise.vue"),
+        redirect: "/HomeView/EnterPrise/MegacorPor",
         children: [
           {
             path: "/HomeView/EnterPrise/MegacorPor",
@@ -65,10 +86,10 @@ router.beforeEach((to, from, next) => {
       confirmButtonText: "确定",
       callback: (action) => {
         console.log(action);
-        // Message({
-        //   type: "info",
-        //   message: `action: ${action}`,
-        // });
+        MessageBox({
+          type: "info",
+         
+        });
         next("/"); // 点击确定后跳转到登录页面
       },
     });

@@ -5,18 +5,31 @@
       <el-aside width="300px">
         <el-col :span="24">
           <div id="box">
-            <img src="https://img2.baidu.com/it/u=3733492087,655703298&fm=253&fmt=auto&app=138&f=JPEG?w=672&h=500" alt=""
-              width="50" height="50" />
+            <img
+              src="https://img2.baidu.com/it/u=3733492087,655703298&fm=253&fmt=auto&app=138&f=JPEG?w=672&h=500"
+              alt=""
+              width="50"
+              height="50"
+            />
             <h2>米花呼叫中心</h2>
           </div>
-          <el-menu default-active="2" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose"
-            style="height: 100vh" router>
-          <!-- <el-submenu index="1">
+          <el-menu
+            default-active="2"
+            class="el-menu-vertical-demo"
+            background-color="#1a233c"
+            text-color="#ffffff"
+      active-text-color="#ffd04b"
+            @open="handleOpen"
+            @close="handleClose"
+            style="height: 100vh;text-align: left"
+            router
+          >
+            <!-- <el-submenu index="1">
               <template slot="title">
                 <i class="el-icon-s-home"></i>
                 <span>首页</span>
               </template>
-                </el-submenu> -->
+                    </el-submenu> -->
             <el-menu-item index="/HomeView/homepage">
               <i class="el-icon-s-home"></i>
               <span slot="title">首页</span>
@@ -25,39 +38,80 @@
               <i class="el-icon-office-building"></i>
               <span slot="title">企业管理</span>
             </el-menu-item>
-            <el-menu-item index="3">
+            <el-menu-item index="">
               <i class="el-icon-pie-chart"></i>
               <span slot="title">通话统计</span>
             </el-menu-item>
-            <el-menu-item index="4">
-              <i class="el-icon-s-grid"></i>
-              <span slot="title">权限管理</span>
-            </el-menu-item>
-            <el-menu-item index="5">
-              <i class="el-icon-s-operation"></i>
-              <span slot="title">系统配置</span>
-            </el-menu-item>
-            <el-menu-item index="6">
-              <i class="el-icon-setting"></i>
-              <span slot="title">权限配置</span>
-            </el-menu-item>
+            <el-submenu index="">
+              <template slot="title">
+                <i class="el-icon-s-check"></i>
+                <span>权限管理</span>
+              </template>
+              <el-menu-item-group>
+                <el-menu-item index="/HomeView/SystemRole"  style="padding-left:80px">
+                  系统角色管理
+                </el-menu-item>
+                <el-menu-item index="/HomeView/UserSystem"  style="padding-left:80px">
+                  系统用户管理
+                </el-menu-item>
+              </el-menu-item-group>
+            </el-submenu>
+            <el-submenu index="6">
+              <template slot="title">
+                <i class="el-icon-s-operation"></i>
+                <span>系统配置</span>
+              </template>
+              <el-menu-item-group>
+                <el-menu-item index="/HomeView/CallbuillingView" style="padding-left:80px">
+                 呼叫计费配置
+                </el-menu-item>
+                <el-menu-item index="" style="padding-left:80px">
+                 客户端版本维护
+                </el-menu-item>
+              </el-menu-item-group>
+            </el-submenu>
+             <el-submenu index="7" >
+              <template slot="title">
+                <i class="el-icon-edit-outline"></i>
+                <span>总机号码管理</span>
+              </template>
+              <el-menu-item-group>
+                <el-menu-item index="/HomeView/TelephoneView" style="padding-left:80px">
+               总机号码管理
+                </el-menu-item>
+                <el-menu-item index="" style="padding-left:80px">
+                 直线号码管理
+                </el-menu-item>
+                <el-menu-item index="" style="padding-left:80px">
+                 外呼模式配置
+                </el-menu-item>
+              </el-menu-item-group>
+            </el-submenu>
             <el-menu-item index="7">
               <i class="el-icon-switch-button"></i>
               <span slot="title" @click="off">退出登录</span>
             </el-menu-item>
           </el-menu>
-        </el-col></el-aside>
+        </el-col>
+        </el-aside>
       <el-container>
         <el-header style="">
           <div class="header-right">
             <i class="el-icon-s-fold" style="font-size: 60px"></i>
           </div>
-          <div style="
-                  display: flex;
-                  align-items: center;
-                  justify-content: flex-end;
-                " class="header-c">
-            <el-avatar :size="30" :src="circleUrl" style="margin: 10px 10px"></el-avatar>
+          <div
+            style="
+              display: flex;
+              align-items: center;
+              justify-content: flex-end;
+            "
+            class="header-c"
+          >
+            <el-avatar
+              :size="30"
+              :src="circleUrl"
+              style="margin: 10px 10px"
+            ></el-avatar>
             <span>admin666</span>
           </div>
         </el-header>
@@ -72,7 +126,7 @@ export default {
   data() {
     return {
       circleUrl:
-        "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
+        'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
     };
   },
   methods: {
@@ -83,13 +137,13 @@ export default {
       console.log(key, keyPath);
     },
     off() {
-      localStorage.removeItem("res");
-      this.$router.replace({ path: "/" });
+      localStorage.removeItem('res');
+      this.$router.replace({ path: '/' });
     },
   },
 
-  created() { },
-  mounted() { },
+  created() {},
+  mounted() {},
 };
 </script>
 <style lang="less" scoped>
@@ -132,7 +186,6 @@ export default {
 }
 
 .el-aside {
-  background-color: #f72f0c;
   color: #333;
   text-align: center;
   // line-height: 100%;
@@ -154,7 +207,7 @@ export default {
   overflow: auto;
 }
 
-body>.el-container {
+body > .el-container {
   margin-bottom: 40px;
   position: relative;
 }
@@ -200,7 +253,7 @@ body>.el-container {
   }
 
   h2 {
-    font-family: "华文楷体";
+    font-family: '华文楷体';
     color: #ffffff;
     font-size: 22px;
   }

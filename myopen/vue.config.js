@@ -5,10 +5,12 @@ module.exports = defineConfig({
   devServer: {
     proxy: {
       "/api": {
-        target: "http://47.94.4.201",
+        target: "https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/",
         ws: true,
         changeOrigin: true,
-        pathRewrite: { "^/api": "" },
+        pathRewrite: {
+          "^/api": "",
+        },
       },
     },
   },

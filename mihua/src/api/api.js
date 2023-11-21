@@ -1,6 +1,7 @@
 import axios from "axios";
 
 axios.defaults.timeout = 5000;
+axios.defaults.baseURL = "";
 
 axios.interceptors.response.use(
   function (response) {
@@ -37,6 +38,8 @@ export function apiPost(url, params) {
       .then((res) => {
         resolve(res.data);
       })
-      .catch((err) => reject(err));
+      .catch((err) => {
+        reject(err.data);
+      });
   });
 }
