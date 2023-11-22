@@ -21,7 +21,8 @@
             <li
               v-for="(item, index) in superlist"
               :key="index"
-              @click="formk(item.id)"
+              @click="formk(item.id,index)"
+              :class="{ selected: selectedIndex === index }"
             >
               <span
                 :class="['status-dot', item.status === 1 ? 'green' : 'red']"
@@ -52,8 +53,8 @@
         </div>
       </el-main>
     </el-container>
-    <el-dialog title="收货地址" :visible.sync="dialogFormVisible">
-      <el-form :model="form">
+    <el-dialog title="添加超级企业" :visible.sync="dialogFormVisible">
+      <el-form :model="form" ref="ruleForm">
         <el-form-item label="超级企业名称">
           <el-input v-model="form.ename" autocomplete="off"></el-input>
         </el-form-item>
@@ -75,7 +76,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="addclick">确 定</el-button>
+        <el-button type="primary" @click="addclick(ruleForm)">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -98,6 +99,7 @@ export default {
         maxconcurrency: '',
       },
       formLabelWidth: '120px',
+      selectedIndex: 0,
     };
   },
   computed: {},
@@ -142,7 +144,9 @@ export default {
         // console.log(this.super);
       });
     },
-    formk(id) {
+    formk(id,index) {
+      console.log(index,id);
+      this.selectedIndex = index;
       this.$bus.$emit('formk', id);
     },
   },
@@ -201,6 +205,9 @@ export default {
   .inlint {
     position: relative;
     top: 14px;
+    .selected {
+  background-color: #00ff00; /* 设置选中项的背景色 */
+}
 
     li:hover {
       background: #ecf5ff;

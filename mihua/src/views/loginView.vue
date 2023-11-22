@@ -129,7 +129,7 @@ export default {
 
   h1 {
     position: absolute;
-    top: 150px;
+    top: 235px;
     font-family: "楷体";
     color: #fff;
     font-weight: 900;
@@ -137,7 +137,6 @@ export default {
 
   .login-c {
     width: 500px;
-    height: 500px;
     background: rgba(255, 255, 255, 0.25);
     box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
     backdrop-filter: blur(4.5px);

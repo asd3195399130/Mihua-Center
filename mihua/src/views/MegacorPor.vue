@@ -1,7 +1,6 @@
 <!--  -->
 <template>
   <div class="">
-    <!-- <img src="../assets/微信截图_20231117113356.png" alt=""> -->
     <div class="header">
       <ul>
         <li>
@@ -237,8 +236,7 @@ export default {
 .middle {
   width: 100%;
   height: 500px;
-  // background: red;
-  border: 1px solid red;
+ background: #fcfcfc;
   position: relative;
   top: 50px;
   margin-top: 20px;

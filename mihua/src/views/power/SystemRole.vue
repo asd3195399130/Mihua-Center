@@ -18,7 +18,6 @@
             placeholder="请输入内容"
             v-model="input3"
             class="input-with-select"
-            @input="searcher"
             @keyup.enter="searcher"
           >
             <el-button slot="append" icon="el-icon-search" @click="searcher"></el-button>
@@ -34,10 +33,10 @@
       <div class="header-create">
         <el-table
           :data="tableData"
-          style="width: 100%; background: #eceef5"
+          style="width: 100%; background: #eceef5;text-align: center;"
           height="100%"
         >
-          <el-table-column type="selection" width="55"> </el-table-column>
+          <el-table-column type="selection" width="55" > </el-table-column>
           <el-table-column fixed prop="id" label="角色id" width="150" sortable>
           </el-table-column>
           <el-table-column fixed prop="rolename" label="角色名称" width="150">
@@ -420,8 +419,7 @@ export default {
 .header {
   width: 96%;
   height: 100%;
-  // height: 500px;
-  border: 1px solid #000;
+  // height: 500px
   margin: 40px auto;
   .header-top {
     text-align: left;
@@ -458,18 +456,23 @@ export default {
   }
 }
 .is-green {
-  width: 20px;
+   width: 20px;
   height: 20px;
-  border-radius: 100%;
-  background-color: green; /* 绿色 */
-  color: red;
+  border-radius: 50%;
+  background-color: green;
+  display: inline-block;
+  vertical-align: middle;
+  z-index:1;
 }
 
 .is-red {
-  width: 20px;
+   width: 20px;
   height: 20px;
-  border-radius: 100%;
-  background-color: red; /* 红色 */
+  border-radius: 50%;
+  background-color: red;
+  display: inline-block;
+  vertical-align: middle; /* 红色 */
+  z-index:1;
 }
 .el-dialog {
   width: 500px;
