@@ -5,7 +5,9 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "test": "vue-cli-service build --mode test",
+    "publish": "vue-cli-service build && vue-cli-service build --mode test"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.1.0",
@@ -15,6 +17,7 @@
     "element-plus": "^2.4.2",
     "moment": "^2.29.4",
     "vue": "^3.2.13",
+    "vue-class-component": "^8.0.0-0",
     "vue-router": "^4.0.3",
     "vuex": "^4.0.0"
   },
@@ -42,10 +45,12 @@
     "extends": [
       "plugin:vue/vue3-essential",
       "eslint:recommended",
-      "@vue/typescript/recommended"
+      "@vue/typescript/recommended",
+      "@vue/typescript"
     ],
     "parserOptions": {
-      "ecmaVersion": 2020
+      "ecmaVersion": 2020,
+      "parser": "@typescript-eslint/parser"
     },
     "rules": {}
   },

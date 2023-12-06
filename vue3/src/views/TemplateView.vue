@@ -1,155 +1,207 @@
 <template>
   <div class="header">
-    <div style="float: right; margin-top: 50px; margin-right: 50px">
-      <el-button type="warning" @click="dialogFormVisible = true">
-        <el-icon><CirclePlusFilled /></el-icon>
-        添加设备模板</el-button
-      >
-        <el-button type="primary" @click="handleSort">
+    <a-button type="primary" @click="handleSort">
       {{ sortDirection === 'asc' ? '升序排序' : '倒序排序' }}
-    </el-button>
-    </div>
-    <el-table
-      :data="tableData"
-      style="width: 95%; margin: auto"
-      class="custom-table"
-      border
-    >
-      <el-table-column prop="id" label="序号" width="200" align="center" />
-      <el-table-column
-        prop="device"
-        label="设备模板唯一标识"
-        width="200"
-        align="center"
-      />
-      <el-table-column
-        prop="name"
-        label="设备模板名称"
-        width="200"
-        align="center"
-      />
-      <el-table-column
-        prop="group"
-        label="所属设备组"
-        width="200"
-        align="center"
-      />
-      <el-table-column
-        prop="create"
-        label="创建时间"
-        width="200"
-        align="center"
-        :icon="Timer"
-      />
-      <el-table-column
-        prop="creator"
-        label="创建者"
-        width="200"
-        align="center"
-      />
-      <el-table-column align="text" label="操作">
-        <template #default="scope">
-          <el-button
-            size="small"
-            type="primary"
-            @click="handleEdit(scope.$index, scope.row)"
-          >
-            <el-icon size="15"><Search /></el-icon>
-          </el-button>
-          <el-button
-            size="small"
-            type="primary"
-            @click="handleDelete(scope.$index, scope.row)"
-          >
-            <el-icon :size="20">
-              <Edit />
-            </el-icon>
-          </el-button>
-          <el-button
-            size="small"
-            type="primary"
-            @click="handleDelete(scope.$index, scope.row)"
-          >
-            <el-icon>
-              <Delete />
-            </el-icon>
-          </el-button>
-        </template>
-      </el-table-column>
-    </el-table>
+    </a-button>
+     <button type="primary" @click="showModal" style="" class="addcl">添加</button>
+    <a-modal v-model:visible="visible" title="添加" :footer="null" >
+     <a-form
+    ref="formRef"
+    name="custom-validation"
+    :model="formState"
+    :rules="rules"
+    v-bind="layout"
+    @finish="handleFinish"
+    @validate="handleValidate"
+    @finishFailed="handleFinishFailed"
+  >
+    <a-form-item has-feedback label="设备唯一标识：" :name="['device']" :rules="rules.device" :labelCol="{ span: 6 }" :wrapperCol="{ span: 16 }">
+    <a-input v-model:value="formState.device" type="text" autocomplete="off"  />
+  </a-form-item>
+  <a-form-item has-feedback label="设备模板名称：" :name="['name']" :rules="rules.name" :labelCol="{ span: 6 }" :wrapperCol="{ span: 16 }">
+    <a-select v-model:value="formState.name">
+      <a-select-option value="B004">B004</a-select-option>
+      <a-select-option value="B005">B005</a-select-option>
+      <a-select-option value="B006">B006</a-select-option>
+      <a-select-option value="B007">B007</a-select-option>
+      <a-select-option value="B008">B008</a-select-option>
+      <a-select-option value="B009">B009</a-select-option>
+      <!-- 在这里添加更多的模板选项 -->
+    </a-select>
+  </a-form-item>
+  <a-form-item has-feedback label="所属设备组" :name="['group']" :rules="rules.group">
+    <a-select v-model:value="formState.group">
+      <a-select-option value="智能Ai">智能Ai</a-select-option>
+      <a-select-option value="智能人工">智能人工</a-select-option>
+      <a-select-option value="人工">人工</a-select-option>
+      <!-- 在这里添加更多的设备组选项 -->
+    </a-select>
+  </a-form-item>
+  <a-form-item has-feedback label="创建时间" :name="['create']" :rules="rules.create">
+    <a-date-picker v-model:value="formState.create"  />
+  </a-form-item>
+  <a-form-item has-feedback label="创建者"  :name="['creator']" :rules="rules.creator">
+    <a-input v-model:value="formState.creator" type="text" autocomplete="off" />
+  </a-form-item>
+    <a-form-item :wrapper-col="{ span: 14, offset: 4 }">
+      <button type="primary" html-type="submit" class="submit" @click.stop="addclick">提交</button>
+      <button style="margin-left: 10px" @click="resetForm" class="reset">取消</button>
+    </a-form-item>
+  </a-form>
+    </a-modal>
+    
+      <a-table :columns="columns" :data-source="tableData" style="margin-top:20px">
+    <template #bodyCell="{ column, text , record}">
+      <template v-if="column.dataIndex === 'name'">
+        <a>{{ text }}</a>
+      </template>
+       <template v-else-if="column.key === 'action'">
+          <span>
+          <button type="primary" @click="handleEdit(record)" class="edit">编辑</button>
+          <button type="danger" @click="handleDelete(record)" class="delete">删除</button>
+        </span>
+
+      </template>
+    </template>
+  </a-table>
        
   </div>
-  <el-dialog v-model="dialogFormVisible" title="Shipping address">
-    <el-form :model="form"
-  :rules="refRules"
- ref="formRef"
->
-      <el-form-item label="设备唯一标识" :label-width="formLabelWidth" prop="device">
-        <el-input v-model="form.device" autocomplete="off" />
-      </el-form-item>
-      <el-form-item label="设备模板名称" :label-width="formLabelWidth" prop="name">
-        <el-select v-model="form.name" placeholder="Please select a zone">
-          <el-option label="B001" value="B001" />
-          <el-option label="B002" value="B002" />
-          <el-option label="B003" value="B003" />
-          <el-option label="B004" value="B004" />
-          <el-option label="B005" value="B005" />
-          <el-option label="B006" value="B006" />
-          <el-option label="B007" value="B007" />
-          <el-option label="B008" value="B008" />
-          <el-option label="B009" value="B009" />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="所属设备组" :label-width="formLabelWidth" prop="group">
-        <el-select v-model="form.group" >
-  <el-option label="智能人工" value="智能人工" />
-  <el-option label="智能Ai" value="智能Ai" />
-  <el-option label="语音助手" value="语音助手" />
-  <el-option label="智能客服" value="智能客服" />
-
-        </el-select>
-     
-      </el-form-item>
-     <el-form-item label="创建时间" prop="date1">
-      <el-col :span="11">
-        <el-date-picker
-          v-model="form.create"
-          type="date"
-          placeholder="Pick a date"
-          style="width: 100%"
-        />
-      </el-col>
-    </el-form-item>
-    <el-form-item label="创建者" :label-width="formLabelWidth" prop="creator">
-        <el-input v-model="form.creator" autocomplete="off" />
-      </el-form-item>
-    </el-form>
-    <template #footer>
-      <span class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">Cancel</el-button>
-        <el-button type="primary" @click="submit()">
-          Confirm
-        </el-button>
-      </span>
-    </template>
-  </el-dialog>
+  
 
 </template>
 
 <script setup lang="ts">
-import { ref, reactive,onMounted } from 'vue';
-import { ElMessage, ElMessageBox ,} from 'element-plus';
+import { ref, reactive,onMounted,defineComponent, computed, CSSProperties, watch, watchEffect  } from 'vue';
+import { ElMessdevice, ElMessdeviceBox ,FormInstance, FormRules} from 'element-plus';
+import { useDraggable } from '@vueuse/core';
+import { SmileOutlined, DownOutlined } from '@ant-design/icons-vue';
+import {Modal } from 'ant-design-vue';
 import moment from 'moment';
-const dialogFormVisible = ref(false);
+import type { Rule } from 'ant-design-vue/es/form';
+// 表单验证
+interface FormState {
+  device: string;
+  name: string;
+  group:string;
+  create:string;
+  creator:string
+}
+ const formRef = ref<FormInstance>();
+    const formState = reactive<FormState>({
+       device: '',
+      name: '',
+      group:'',
+      create:'',
+      creator:''
+    });
+    
 
-const form = reactive({
-  device:"",
-  name:"",
-  group:"",
- create:"",
-  creator:""
- 
-})
+    const rules: Record<string, Rule[]> = {
+      device: [{ required: true, message: '设备标识不能为空',trigger:'blur' }],
+      name: [{ required: true, message: '请选择模板名称',trigger:'change' }],
+      group: [{ required: true, message: '选择设备组',trigger:'change' }],
+      create:[{ required: true, message: '时间不能为空',trigger:'change' }],
+      creator:[{ required: true, message: '请输入创建者',trigger:'blur' }]
+    };
+    const layout = {
+      labelCol: { span: 4 },
+      wrapperCol: { span: 14 },
+    };
+    const handleFinish = (values: FormState) => {
+      const formattedDate = moment(formState.create).format('YYYY-MM-DD HH:mm:ss');
+  tableData.value.push({
+        id:tableData.value.length+1,
+        device:formState.device ,
+      name: formState.name,
+      group:formState.group,
+      create:formattedDate,
+      creator:formState.creator
+      })
+      visible.value = false;
+    console.log(formState.create)
+      console.log(values, formState);
+    };
+    const handleFinishFailed = errors => {
+      console.log(errors);
+    };
+    const resetForm = () => {
+      formRef.value.resetFields();
+      visible.value = false;
+    };
+    const handleValidate = () => {
+      // console.log(args);
+    
+
+
+    };
+
+
+const dialogFormVisible = ref(false);
+const formSize = ref('default')
+const ruleFormRef = ref<FormInstance>()
+// 提示框
+
+   const visible = ref<boolean>(false);
+
+    const showModal = () => {
+      visible.value = true;
+    };
+
+    // const handleOk = (e: MouseEvent) => {
+    //   console.log(e);
+    //   visible.value = false;
+    // };
+
+
+
+const columns = ref([
+  {
+    title: 'ID',
+    dataIndex: 'id',
+    key: 'id',
+    align:"center"
+  },
+  {
+    title: '设备唯一标识',
+    dataIndex: 'device',
+    key: 'device',
+    align:"center"
+  },
+  {
+    title: '设备模板名称',
+    dataIndex: 'name',
+    key: 'name',
+    ellipsis: true,
+    align:"center"
+  },
+  {
+    title: '所属设备组',
+    dataIndex: 'group',
+    key: 'group',
+    ellipsis: true,
+    align:"center"
+  },
+  {
+    title: '创建时间',
+    dataIndex: 'create',
+    key: 'create',
+    ellipsis: true,
+    align:"center"
+  },
+  {
+    title: '创建者',
+    dataIndex: 'creator',
+    key: 'creator',
+    ellipsis: true,
+    align:"center"
+  },
+ {
+    title:"操作",
+    key:'action',
+    align:"center",
+    
+  }
+]);
 const tableData = ref([
   {
     id: 1,
@@ -232,44 +284,28 @@ const tableData = ref([
     creator: 'admin1',
   },
 ]);
-// const rules = {
-//   device: [{ required: true, message: '请输入设备唯一标识', trigger: 'blur' }],
-//   name: [{ required: true, message: '请选择设备模板名称', trigger: 'change' }],
-//   group: [{ required: true, message: '请选择所属设备组', trigger: 'change' }],
-//   date1: [{ type: 'date', required: true, message: '请选择创建时间', trigger: 'change' }],
-//   creator: [{ required: true, message: '请输入创建者', trigger: 'blur' }]
-// };
-
-const formLabelWidth = '120px';
-const submit=()=>{
-   const createTime = moment(form.create);  // 假设 form.create 是用户输入的时间字符串
-  const formattedCreateTime = createTime.format('YYYY-MM-DD HH:mm:ss');  // 使用指定的时间格式
-  tableData.value.push({
-
-    id: tableData.value.length + 1,
-    device: form.device,
-    name: form.name,
-    group: form.group,
-    create:  formattedCreateTime,
-    creator: form.creator
-  });
-
-  // 提交成功后关闭弹窗
-  dialogFormVisible.value = false;
-
-  // 清空表单数据
-  form.device = "";
-  form.name = "";
-  form.group = "";
-  form.create = "";
-  form.creator = "";
-
-  // 提示用户添加成功
-  ElMessage({
-    type: 'success',
-    message: '添加成功!'
+// 删除
+const handleDelete = (record)=>{
+  console.log(record)
+  Modal.confirm({
+    title: '确认删除?',
+    content: `你确定要删除 ${record.name} 吗？`,
+    onOk() {
+      // 确认删除
+      const index = tableData.value.findIndex(item => item.id === record.id);
+      if (index > -1) {
+        tableData.value.splice(index, 1);
+      }
+    },
+    onCancel() {
+      // 取消删除
+    }
   });
 }
+
+
+// const formLabelWidth = '120px';
+
 let sortDirection = ref('asc');
 
 function handleSort(): void {
@@ -281,33 +317,7 @@ function handleSort(): void {
     tableData.value.sort((a, b) => a.id - b.id);
   }
 }
-const handleDelete = (index, row) => {
-  ElMessageBox.confirm(
-    '此操作将永久删除该文件, 是否继续?',
-    'Warning',
-    {
-      confirmButtonText: '确认',
-      cancelButtonText: '取消',
-      type: 'warning',
-    }
-  )
-    .then(() => {
-      tableData.value.splice(index, 1);
-      ElMessage({
-        type: 'success',
-        message: '删除成功!',
-      })
-    })
-    .catch(() => {
-      ElMessage({
-        type: 'info',
-        message: '已取消删除',
-      })
-    })
-  // 处理删除逻辑，可以根据需要编写具体的代码
-  // 在这个示例中，我们将使用 splice 方法从 tableData 中删除指定的行数据
-  
-};
+
 // const order = ref('asc');
 // const sortList = (order) => {
 //   if(order.value === 'asc'){
@@ -325,6 +335,15 @@ const handleDelete = (index, row) => {
 .header {
   width: 100%;
   height: 100vh;
+  .addcl{
+   width:150px;
+   height:50px;
+   border:none;
+   background:#f5af19;
+   cursor: pointer;
+   margin-top:52px;
+  }
+  
   /* fallback for old browsers */
   background: -webkit-linear-gradient(
     to bottom,
@@ -374,20 +393,42 @@ const handleDelete = (index, row) => {
       }
     }
   }
-  .el-button {
-    text-align: center;
+.delete{
+  width:80px;
+  height:50px;
+  margin-left:10px;
+ background:#c31432;
+  border:none;
+  color:#ffffff;
+  cursor: pointer;
+
+}
+.edit{
+  width:80px;
+  height:50px;
+   border:none;
+   background:#4A00E0;
+   color:#ffffff;
+   cursor: pointer;
+}
+
+}
+ .submit{
+      width:80px;
+  height:50px;
+  margin-left:10px;
+ background:#4A00E0;
+  border:none;
+  color:#ffffff;
+  cursor: pointer;
   }
-}
-.el-button--text {
-  margin-right: 15px;
-}
-.el-select {
-  width: 300px;
-}
-.el-input {
-  width: 300px;
-}
-.dialog-footer button:first-child {
-  margin-right: 10px;
-}
+  .reset{
+     width:80px;
+  height:50px;
+  margin-left:10px;
+ background:#c31432;
+  border:none;
+  color:#ffffff;
+  cursor: pointer;
+  }
 </style>

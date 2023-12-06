@@ -1,8 +1,8 @@
 <template>
     <div class="box">
         <img src="../assets/微信截图_20231124135143.png" alt="">
-        <router-link to="/test/homeword">首页</router-link>|
-        <router-link to="/test/template">模板管理</router-link>|
+        <router-link to="/test/homeword" active-class="active-link">首页</router-link>|
+        <router-link to="/test/template" active-class="active-link">模板管理</router-link>|
         <router-link to="">设备管理</router-link>|
         <router-link to="">接入管理</router-link>|
         <router-link to="">数据使用</router-link>|
@@ -47,5 +47,13 @@
         text-decoration: none;
         background: #1ecfd7;
     }
+    .active-link {
+    background: #70e1f5;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to right, #ffd194, #70e1f5);  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to right, #ffd194, #70e1f5); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+;
+color:#6E48AA
+
+}
 }
 </style>

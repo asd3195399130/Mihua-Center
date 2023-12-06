@@ -3,11 +3,12 @@
             <el-button type="primary" style="margin-left: 16px;margin-top: 25px;" @click="drawer = true">
         时间轴
       </el-button>
-        <div ref="box" style="width: 1500px; height: 1200px;margin: auto;">
+        <div ref="box" style="width: 800px; height: 800px;margin: auto;">
         </div>
-        <el-progress :percentage="percentage" :color="customColor" /> 
-        <el-progress :percentage="percentage" :color="customColors" />
-        <el-progress :percentage="percentage" :color="customColorMethod" />
+         <a-progress :percent="30" />
+  <a-progress :percent="50" status="active" />
+  <a-progress :percent="70" status="exception" />
+  <a-progress :percent="100" />
         <el-drawer
     v-model="drawer"
     title="人生重大事件"
@@ -99,59 +100,57 @@ onMounted(() => {
     myChart.value = echarts.init(box.value);
     var option;
 
-    let colors = ['#FBB4AE', '#B3CDE3', '#CCEBC5', '#DECBE4', '#5470C6'];
-    let mydata = [
-        { name: 'L1', itemStyle: { color: colors[0] }, depth: 0 },
-        { name: 'L1-1', itemStyle: { color: colors[0] }, depth: 0 },
+ myChart.value.showLoading();
+    myChart.value.hideLoading();
+    
+ var   data =  {"nodes":[
+{"name":"奥特科创圆"},
+{"name":"1路车站"},
+{"name":"碧桂园"},
+{"name":"郑州西站"},
+{"name":"中原路"},
+{"name":"吾悦广场"}
+],
+"links":[
+{"source": "奥特科创圆", "target": "1路车站",  "value": 1.1},
+{"source": "1路车站", "target": "碧桂园",  "value": 0.8},
+{"source": "1路车站",  "target": "郑州西站",  "value": 2},
+{"source": "1路车站",  "target": "中原路",  "value": 1.2},
+{"source": "吾悦广场", "target": "1路车站",  "value": 2.9},
+]}
 
 
-
-        { name: 'L2', itemStyle: { color: colors[1] }, depth: 1 },
-        { name: 'L2-1', itemStyle: { color: colors[1] }, depth: 1 },
-
-
-
-        { name: 'L3', itemStyle: { color: colors[2] }, depth: 2 },
-
-
-
-
-    ];
-    // mydata.reverse()
-    let mylinks = [
-        // L1→L3	 4509
-        { source: 'L1', target: 'L3', value: 4509 },
-        // L2→L3	 12196
-        { source: 'L2', target: 'L3', value: 12196 },
-        // L1→L2→L3	 2404
-        { source: 'L1-1', target: 'L2-1', value: 2404 },
-        { source: 'L2-1', target: 'L3', value: 2404 },
-
-
-    ];
-    option = {
+    myChart.value.setOption(option = {
+        title: {
+            text: 'Sankey Diagram'
+        },
         tooltip: {
             trigger: 'item',
-            triggerOn: 'mousemove',
+            triggerOn: 'mousemove'
         },
-        series: {
-            type: 'sankey',
-            lineStyle: {
-                opacity: 0.3,
-                color: 'gradient',
-                curveness: 0.7,
-            },
-            // nodeAlign: 'left',
-            nodeGap: 18,
-            layoutIterations: 1,
-            emphasis: {
-                focus: 'adjacency',
-            },
-            data: mydata,
-            links: mylinks,
-        },
-    };
-    // 使用刚指定的配置项和数据显示图表。
+        series: [
+            {
+                nodeGap:100,
+                nodeWidth: 50,
+                type: 'sankey',
+                data: data.nodes,
+                links: data.links,
+                focusNodeAdjacency: 'allEdges',
+                itemStyle: {
+                    normal: {
+                        borderWidth: 1,
+                        borderColor: '#aaa'
+                    }
+                },
+                lineStyle: {
+                    normal: {
+                        color: 'source',
+                        curveness: 0.5
+                    }
+                }
+            }
+        ]
+    });
     myChart.value.setOption(option);
 });
 </script>
@@ -159,7 +158,7 @@ onMounted(() => {
 <style scoped lang="less">
 .heder {
     width: 100%;
-    height: 100%;
+    height: 100vh;
     border-top: 3px solid #224691;
    background: -webkit-linear-gradient(to bottom,#375595,#56417a,#4e3a7a,#152874);
      /* Chrome 10-25, Safari 5.1-6 */
